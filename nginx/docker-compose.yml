@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  scell-nginx:
+    image: library/nginx:1.25.3
+    container_name: scell-nginx
+    networks:
+      - scell-nginx-network
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+      - ./certs:/etc/nginx/certs
+      - ./html:/usr/share/nginx/html
+      - ./nginx.conf.nginx:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+      - 443:443
+    env_file:
+      - nginx.env
+    restart: unless-stopped
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '10'
+
+networks:
+  scell-nginx-network:
+    external: true
